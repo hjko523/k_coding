@@ -1,0 +1,281 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1test</title>
+</head>
+<body>
+
+    <script>
+  
+        // id, name, 3과목의 성적(score)를 가진 student클래스를 구현하고자 한다.
+       
+        
+     
+        // 1> Object를 이용하여 만들어보시오.
+        /* 
+        -장점- 
+        1. 직관적, 코딩하기 쉽다.
+        2. 한 객체를 계속 불러올수 있다.
+        3. 독립적으로 데이터를 유지한다.
+
+        -단점-
+        1. 인스턴스가 추가되면 코드도 추가된다. (코드의 중복)
+        2. 코드의 일관성이 없다. (일관성이 없게끔하는 요지를 남긴다.)
+        
+        -결론-
+        1. 인스턴스가 다수개가 되는 경우는 순수 object방식은 좋지 않다.
+        2. 함수가 다수개 있을경우. (X)
+        3. 어플의 단일 인스턴스 (설정정보) => 싱글톤
+        */
+        const Student1 = function(id, name, score)
+        {
+            return {
+                getID()
+                {
+                    return id;
+                },
+
+                getName()
+                {
+                    return name;
+                },
+
+                getScore()
+                {
+                    return score;
+                },
+                
+                setID(_id)
+                {
+                id = _id;
+                },
+                setName(_name)
+                {
+                    name = _name;
+                },
+
+                setScore(_score)
+                {
+                score = _score;
+                }
+            }
+        }
+
+        const st1 = Student1('hgd', '홍길동', [60,70,80]);
+    
+
+        console.log('-------1. OBJECT 를 이용해서 만든 Student--------')
+        console.log('---getter---');
+        console.log(st1.getID());
+        console.log(st1.getName());
+        console.log(st1.getScore());
+
+        const st2 = Student1();
+        console.log('---setter---');
+        
+        st2.setID('lss');
+        st2.setName('이순신');
+        st2.setScore([30,40,50]);
+
+        console.log(st2.getID());
+        console.log(st2.getName());
+        console.log(st2.getScore());
+      
+
+
+
+         // 2> constructor + prototype를 이용하여 만들어보시오 ---------------------
+         /*
+         -장점-
+         1. 코드길이가 줄어든다
+         2. 객체의 선언부와 객체의 정의부가 완전히 분리
+         -단점-
+         1. 메소드와 속성의 위치가 애매
+         2. this해석이 부정확
+         3. 
+
+         */
+    
+        const student2 = function(_id, _name, _score)
+        {
+            this.id = _id;
+            this.name = _name;
+            this.score = [..._score];   // 변경이 어려움
+
+        
+        }
+
+       
+
+        student2.prototype.getID = function()
+        {
+            return this.id;
+        }
+        student2.prototype.getName = function()
+        {
+            return this.name;
+        }
+        student2.prototype.getScore = function()
+        {
+            return this.score;
+        }
+        
+      
+
+        const stu1 = new student2('khj', '고해주', [30,40,50]);
+    
+        console.log('-------2. constructor + prototype를 이용--------');
+            
+        console.log(stu1.getID());
+        console.log(stu1.getName());
+        console.log(stu1.getScore());
+        
+
+
+        //3> class를 이용하여 만들어보시오. --------------------------------------
+        
+        /*
+         -장점-
+         1. 접근제어가 용이하다
+         2. 선언과 정의부가 분리되어있다
+         3. 다른 언어에서 사용하는 객체지향 구현 스킬을 그대로 사용
+         4. 가독성이 좋다
+        */
+        
+        class Student5{
+
+            // id, name은 private!!
+            // getter, setter로 접급
+            #id;
+            #name;
+      
+
+            constructor(_id, _name, _score)
+            {
+                this.id = _id;
+                this.name = _name;
+                this.score = [..._score];
+            }
+
+            getID()
+            {
+                return this.id;
+            }
+            
+            setID(_id)
+            {
+                return _id;
+            }
+
+
+
+            getName()
+            {
+                return this.name;
+            }
+                       
+            setName(_name)
+            {
+                return _name;
+            }
+
+
+            getScore()
+            {
+                return this.score;
+            }
+
+            setScore(_score)
+            {
+                return _score;
+            }
+
+            getTotal()
+            {
+                let total = 0;
+                
+                for (let val of this.score)
+                {
+                    total = total + val;
+                }
+
+                return total;
+            }
+
+        }
+        
+            const st5 = new Student5 ('hgd','홍길동', [60,70,80]);
+            
+            console.log('-------3. Class 를 이용해서 만든 Student--------');
+            console.log(st5.getID());
+            console.log(st5.getName());
+            console.log(st5.getScore());
+            console.log(st5.getTotal());
+
+       
+
+  
+
+        // 클로저 --------------------------------------------------------------
+         /*
+         -장점-
+         1. 접근제어가 가능하다
+         2. 객체의 선언부와 객체의 정의부가 완전히 분리되어있다.
+         -단점-
+         1. 문법적으로 어렵다 (내부 메커니즘을 이용한 오용)
+         2. 
+         3. 
+
+         */
+
+    
+        const student4 = function(_id, _name, _score)
+        {
+
+            // 깊은 복사를 처리한 다음
+            _score = [..._score];
+
+            // 객체를 리턴한다.
+            return {
+                getId(){
+                    return _id;
+                },
+                
+                getName()
+                {
+                    return _name;
+                },
+
+                getScore()
+                {
+                    return _score;
+                }
+                }
+        }
+        
+        const arr = [90,70,80];
+        
+        const hong = student4('hgd', '홍길동', arr);
+        arr[0] = 0;
+        
+        console.log('-------4. 클로저를 이용해서 만든 Student--------');
+        console.log(hong.getScore());
+
+
+
+
+        
+          
+       
+    
+    </script>
+ 
+  
+    
+</body>
+</html>
